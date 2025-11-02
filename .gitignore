@@ -62,3 +62,6 @@ sysinfo.txt
 
 # Crashlytics generated file
 crashlytics-build.properties
+
+# Files that can't be added to github even with LFS
+CollaboraX/Library/PackageCache/com.unity.burst@1df634d836b8/.Runtime/libburst-llvm-19.dylib
