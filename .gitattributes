@@ -1,0 +1,25 @@
+*.psd filter=lfs diff=lfs merge=lfs -text
+*.png filter=lfs diff=lfs merge=lfs -text
+*.jpg
+git[[:space:]]lfs[[:space:]]track[[:space:]]*.jpeg
+git[[:space:]]lfs[[:space:]]track[[:space:]]*.tga
+git[[:space:]]lfs[[:space:]]track[[:space:]]*.tif filter=lfs diff=lfs merge=lfs -text
+*.tiff filter=lfs diff=lfs merge=lfs -text
+*.bmp filter=lfs diff=lfs merge=lfs -text
+*.psb filter=lfs diff=lfs merge=lfs -text
+*.fbx filter=lfs diff=lfs merge=lfs -text
+*.objab
+git[[:space:]]lfs[[:space:]]track[[:space:]]*.prefab
+git[[:space:]]lfs[[:space:]]track[[:space:]]*.unity
+git[[:space:]]lfs[[:space:]]track[[:space:]]*.asset
+git[[:space:]]lfs[[:space:]]track[[:space:]]*.mat filter=lfs diff=lfs merge=lfs -text
+*.animoller
+git[[:space:]]lfs[[:space:]]track[[:space:]]*.controller
+git[[:space:]]lfs[[:space:]]track[[:space:]]*.wav
+git[[:space:]]lfs[[:space:]]track[[:space:]]*.mp3
+git[[:space:]]lfs[[:space:]]track[[:space:]]*.ogg
+git[[:space:]]lfs[[:space:]]track[[:space:]]*.mp4
+git[[:space:]]lfs[[:space:]]track[[:space:]]*.mov
+git[[:space:]]lfs[[:space:]]track[[:space:]]*.avi
+git[[:space:]]lfs[[:space:]]track[[:space:]]*.zipypackage filter=lfs diff=lfs merge=lfs -text
+*.unitypackage filter=lfs diff=lfs merge=lfs -text
