@@ -2,7 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit;
-using UnityEngine.UI; // Required to find Buttons
+using UnityEngine.UI; 
 
 public class TakeNotes : MonoBehaviour
 {
@@ -24,7 +24,8 @@ public class TakeNotes : MonoBehaviour
     public float aimTolerance = 0.2f;
     
     [Header("Input")]
-    public InputActionProperty openAction; 
+    public InputActionProperty openAction;
+    public InputActionProperty closeAction;
 
     [Header("Controller Setup")]
     public Transform controllerHand; 
@@ -55,9 +56,15 @@ public class TakeNotes : MonoBehaviour
             }
         }
 
-        if (notesOpen && Keyboard.current?.qKey.wasPressedThisFrame == true)
-            CloseNotes();
+        if (closeAction.action != null && closeAction.action.WasPressedThisFrame())
+        {
+            Debug.Log("[TakeNotes] A BUTTON PRESSED! (Close Action)");
             
+            if (notesOpen)
+            {
+                CloseNotes();
+            }
+        }
         if (notesOpen) SyncKeyboardBuffer();
     }
 
@@ -147,6 +154,14 @@ public class TakeNotes : MonoBehaviour
         notesText.enableWordWrapping = true;
     }
     
-    private void OnEnable() { if (openAction.action != null) openAction.action.Enable(); }
-    private void OnDisable() { if (openAction.action != null) openAction.action.Disable(); }
+    private void OnEnable() 
+    { 
+        if (openAction.action != null) openAction.action.Enable(); 
+        if (closeAction.action != null) closeAction.action.Enable(); // NEW
+    }
+    private void OnDisable() 
+    { 
+        if (openAction.action != null) openAction.action.Disable(); 
+        if (closeAction.action != null) closeAction.action.Disable(); // NEW
+    }
 }

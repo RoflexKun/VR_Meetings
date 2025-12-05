@@ -56,4 +56,14 @@ public class KeyboardScript : MonoBehaviour
         CloseAllLayouts();
         SetLayout.SetActive(true);
     }
+
+    public void Enter()
+    {
+        Debug.Log("[Keyboard] Enter Key Pressed");
+        if (TextField != null)
+        {
+            TextField.text = TextField.text + "\n";
+            TextField.ForceLabelUpdate();
+        }
+    }
 }

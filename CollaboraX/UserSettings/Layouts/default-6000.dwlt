@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ProjectBrowser
+  m_Name: ConsoleWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -121,14 +121,14 @@ MonoBehaviour:
     y: 576
     width: 1454
     height: 405
-  m_MinSize: {x: 231, y: 276}
-  m_MaxSize: {x: 10001, y: 10026}
-  m_ActualView: {fileID: 14}
+  m_MinSize: {x: 101, y: 126}
+  m_MaxSize: {x: 4001, y: 4026}
+  m_ActualView: {fileID: 19}
   m_Panes:
   - {fileID: 14}
   - {fileID: 19}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -391,8 +391,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Project\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 0
-    y: 600
+    x: 1536
+    y: 655
     width: 1453
     height: 379
   m_SerializedDataModeController:
@@ -415,9 +415,9 @@ MonoBehaviour:
     m_SceneHandles: 
     m_ShowAllHits: 0
     m_SkipHidden: 0
-    m_SearchArea: 1
+    m_SearchArea: 0
     m_Folders:
-    - Assets
+    - Assets/Scripts
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -427,15 +427,15 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets
+  - Assets/Scripts
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\Razvan\Desktop\VR_Meetings\CollaboraX
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 7afe0000
-    m_LastClickedID: 65146
+    scrollPos: {x: 0, y: 25}
+    m_SelectedIDs: e4fe0000
+    m_LastClickedID: 65252
     m_ExpandedIDs: 000000003afe0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -491,10 +491,10 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 
-    m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
-    m_ExpandedInstanceIDs: c6230000cec000004c720100
+    m_SelectedInstanceIDs: d6d90000
+    m_LastClickedInstanceID: 55766
+    m_HadKeyboardFocusLastEvent: 1
+    m_ExpandedInstanceIDs: c6230000cec000004c720100a6280100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -511,7 +511,7 @@ MonoBehaviour:
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_TrimLeadingAndTrailingWhitespace: 0
-      m_ClientGUIView: {fileID: 7}
+      m_ClientGUIView: {fileID: 5}
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
       m_InstanceID: 0
@@ -610,10 +610,10 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_SceneHierarchy:
     m_TreeViewState:
-      scrollPos: {x: 0, y: 0}
+      scrollPos: {x: 0, y: 127}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 04f8ffff8efaffff
+      m_ExpandedIDs: 0aeaffffbcebffff84f2ffff40f3ffff5ef3ffff1cfbffffced90000d6d90000dad90000e2d90000e8d90000fed90000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1217,9 +1217,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: -0.3553053, y: 5.9375696, z: -18.299871}
+    m_Target: {x: 549.23846, y: 264.3506, z: -0.047831476}
     speed: 2
-    m_Value: {x: -0.3553053, y: 5.9375696, z: -18.299871}
+    m_Value: {x: 549.23846, y: 264.3506, z: -0.047831476}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1265,13 +1265,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.2851689, y: -0.31486234, z: 0.10017782, w: 0.9002243}
+    m_Target: {x: 0.19057809, y: -0.19001909, z: -0.038540993, w: -0.96282464}
     speed: 2
-    m_Value: {x: -0.28516886, y: 0.3148623, z: -0.10017782, w: -0.90022427}
+    m_Value: {x: 0.19057809, y: -0.1900191, z: -0.038540993, w: -0.9628247}
   m_Size:
-    m_Target: 0.8660254
+    m_Target: 0.17844294
     speed: 2
-    m_Value: 0.8660254
+    m_Value: 0.17844294
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1427,10 +1427,10 @@ MonoBehaviour:
     m_TextWithWhitespace: "Console\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1536
-    y: 657
-    width: 1455
-    height: 377
+    x: 0
+    y: 600
+    width: 1453
+    height: 379
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
