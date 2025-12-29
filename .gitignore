@@ -63,3 +63,9 @@ CollaboraX/*.unitypackage
 
 # Crashlytics generated file
 CollaboraX/crashlytics-build.properties
+
+# Ignore the Wit.ai configuration file
+CollaboraX/Assets/Scripts/WitConfig.asset
+CollaboraX/ProjectSettings/wit.config
+CollaboraX/ProjectSettings/WitConfigExports/
+CollaboraX/Assets/Scripts/WitConfig.asset.meta
