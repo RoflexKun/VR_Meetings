@@ -137,7 +137,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4145292139985048678, guid: 3967f87296c892e40b57e37bc8601550, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -2.228
       objectReference: {fileID: 0}
     - target: {fileID: 4145292139985048678, guid: 3967f87296c892e40b57e37bc8601550, type: 3}
       propertyPath: m_LocalRotation.w
@@ -187,6 +187,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &304242119 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8402582397435085310, guid: 16e2a922e186a6f4497688dfc2f25610, type: 3}
+  m_PrefabInstance: {fileID: 7416425557690505116}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &323742138 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 559165602987722869, guid: 16e2a922e186a6f4497688dfc2f25610, type: 3}
@@ -224,6 +229,75 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8402582397435085309, guid: 16e2a922e186a6f4497688dfc2f25610, type: 3}
   m_PrefabInstance: {fileID: 7416425557690505116}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &541103928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304242119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2fadf230d1919748a9aa21d40f74619, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TrackingType: 0
+  m_UpdateType: 0
+  m_IgnoreTrackingState: 0
+  m_PositionInput:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Position
+      m_Type: 0
+      m_ExpectedControlType: Vector3
+      m_Id: 957e5d03-29d2-4785-966a-7d3dbe3f45c6
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  m_RotationInput:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Rotation
+      m_Type: 0
+      m_ExpectedControlType: Quaternion
+      m_Id: a534f9cf-c3e9-467d-983a-94aac62c8f4b
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  m_TrackingStateInput:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Tracking State
+      m_Type: 0
+      m_ExpectedControlType: Integer
+      m_Id: 7a886116-30e3-46a9-ab32-2e064de55194
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  m_PositionAction:
+    m_Name: 
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 19d55273-cc85-40ac-82bd-25250ba93b01
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  m_RotationAction:
+    m_Name: 
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 948da22f-6051-4ef6-91ed-c0aeb81e5f76
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!114 &657699215 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4683036561478564111, guid: 977ddd87d0a2a394b916b6de18a56cf3, type: 3}
@@ -258,7 +332,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2130375573001811736, guid: 0267a1d338db2bf4c9625e450bbaaad0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -2.99
       objectReference: {fileID: 0}
     - target: {fileID: 2130375573001811736, guid: 0267a1d338db2bf4c9625e450bbaaad0, type: 3}
       propertyPath: m_LocalRotation.w
@@ -315,7 +389,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598815579406187027, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -3.9
       objectReference: {fileID: 0}
     - target: {fileID: 6598815579406187027, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
       propertyPath: m_LocalRotation.w
@@ -348,6 +422,10 @@ PrefabInstance:
     - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
       propertyPath: m_Name
       value: XR Device Simulator
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598815579406187037, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -460,6 +538,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 814908849208274555, guid: 2134a7cc44d59ae408004f172b9c305d, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.2322
+      objectReference: {fileID: 0}
     - target: {fileID: 814908849208274555, guid: 2134a7cc44d59ae408004f172b9c305d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.4612136
@@ -1414,7 +1496,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7155268429489756321, guid: 16e2a922e186a6f4497688dfc2f25610, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -8.14
+      value: -13.99
       objectReference: {fileID: 0}
     - target: {fileID: 7155268429489756321, guid: 16e2a922e186a6f4497688dfc2f25610, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1448,6 +1530,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: XR Origin Hands (XR Rig) MP Template Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 7259821014962510115, guid: 16e2a922e186a6f4497688dfc2f25610, type: 3}
+      propertyPath: m_RequestedTrackingOriginMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8037530736646247485, guid: 16e2a922e186a6f4497688dfc2f25610, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1456,10 +1542,14 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3365419113486042522, guid: 16e2a922e186a6f4497688dfc2f25610, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8402582397435085310, guid: 16e2a922e186a6f4497688dfc2f25610, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 541103928}
   m_SourcePrefab: {fileID: 100100000, guid: 16e2a922e186a6f4497688dfc2f25610, type: 3}
 --- !u!1001 &8780779089499994888
 PrefabInstance:
