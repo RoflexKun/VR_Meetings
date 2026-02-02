@@ -47,7 +47,7 @@ CollaboraX/*.fbx
 CollaboraX/*.mp4
 CollaboraX/*.mov
 CollaboraX/*.avi
-CollaboraX/*.obj
+CollaboraX/*.objs
 
 # Unity3D generated meta files
 CollaboraX/*.pidb.meta
@@ -72,3 +72,6 @@ CollaboraX/Assets/Scripts/WitConfig.asset.meta
 
 CollaboraX/Assets/Scripts/ApiKeys.cs
 CollaboraX/Assets/Scripts/ApiKeys.cs.meta
+
+CollaboraX/Assets/Scripts/[Ww]it[Cc]onfig.asset
+CollaboraX/Assets/Scripts/[Ww]it[Cc]onfig.asset.meta
