@@ -69,3 +69,6 @@ CollaboraX/Assets/Scripts/WitConfig.asset
 CollaboraX/ProjectSettings/wit.config
 CollaboraX/ProjectSettings/WitConfigExports/
 CollaboraX/Assets/Scripts/WitConfig.asset.meta
+
+CollaboraX/Assets/Scripts/ApiKeys.cs
+CollaboraX/Assets/Scripts/ApiKeys.cs.meta

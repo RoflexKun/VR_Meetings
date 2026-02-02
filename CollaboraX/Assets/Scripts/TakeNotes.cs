@@ -23,7 +23,12 @@ public class TakeNotes : MonoBehaviour
     public float activationDistance = 5.0f; 
     public float aimTolerance = 0.2f;
     
-    [Header("Input")]
+    // --- FIX 1: Adaugam o limita de timp intre click-uri ---
+    [Header("Input Settings")]
+    public float clickCooldown = 0.3f; // 0.3 secunde pauza intre click-uri
+    private float lastClickTime = 0f;  // Cand am dat ultimul click
+
+    [Header("Input Actions")]
     public InputActionProperty openAction;
     public InputActionProperty closeAction;
 
@@ -44,8 +49,28 @@ public class TakeNotes : MonoBehaviour
 
     void Update()
     {
+        // Verificam CLOSE action
+        if (closeAction.action != null && closeAction.action.WasPressedThisFrame())
+        {
+            // --- FIX 2: Aplicam cooldown si aici ---
+            if (Time.time - lastClickTime < clickCooldown) return;
+            lastClickTime = Time.time;
+
+            Debug.Log("[TakeNotes] Close Action Pressed");
+            if (notesOpen) CloseNotes();
+            return; // Iesim ca sa nu facem si Open in acelasi frame
+        }
+
+        // Verificam OPEN / CLICK action
         if (openAction.action != null && openAction.action.WasPressedThisFrame())
         {
+            // --- FIX 3: THE MAGIC GUARD ---
+            // Daca a trecut prea putin timp de la ultimul click, ignoram complet
+            if (Time.time - lastClickTime < clickCooldown) return;
+            
+            // Actualizam timpul ultimului click valid
+            lastClickTime = Time.time;
+
             if (!notesOpen)
             {
                 CheckForPaper();
@@ -56,21 +81,13 @@ public class TakeNotes : MonoBehaviour
             }
         }
 
-        if (closeAction.action != null && closeAction.action.WasPressedThisFrame())
-        {
-            Debug.Log("[TakeNotes] A BUTTON PRESSED! (Close Action)");
-            
-            if (notesOpen)
-            {
-                CloseNotes();
-            }
-        }
         if (notesOpen) SyncKeyboardBuffer();
     }
 
     void CheckForPaper()
     {
         RaycastHit hit;
+        // SphereCast e bun pentru obiecte mari
         if (Physics.SphereCast(controllerHand.position, 0.4f, controllerHand.forward, out hit, activationDistance))
         {
             if (hit.collider.gameObject == paperObject)
@@ -83,23 +100,21 @@ public class TakeNotes : MonoBehaviour
     void CheckForKeys()
     {
         RaycastHit hit;
+        // Raycast e mai precis pentru taste mici
         if (Physics.Raycast(controllerHand.position, controllerHand.forward, out hit, activationDistance))
         {
             Button btn = hit.collider.GetComponent<Button>();
             
-            if (btn != null)
-            {
-                Debug.Log($"[TakeNotes] Force Clicking Button: {hit.collider.name}");
-                btn.onClick.Invoke();
-            }
-            else
+            // Logica pentru a gasi butonul (direct sau in parinte)
+            if (btn == null)
             {
                 btn = hit.collider.GetComponentInParent<Button>();
-                if (btn != null)
-                {
-                    Debug.Log($"[TakeNotes] Force Clicking Parent Button: {btn.name}");
-                    btn.onClick.Invoke();
-                }
+            }
+
+            if (btn != null)
+            {
+                Debug.Log($"[TakeNotes] Clicking Button: {btn.name} at time {Time.time}");
+                btn.onClick.Invoke();
             }
         }
     }
@@ -113,14 +128,21 @@ public class TakeNotes : MonoBehaviour
         notesOpen = true;
 
         if (paperObject != null) paperObject.GetComponent<Collider>().enabled = false;
+        
+        // Dezactivam locomotia doar daca referinta exista
         if (locomotionSystem != null) locomotionSystem.gameObject.SetActive(false);
 
         PositionUI();
 
         if (keyboardUI != null && keyboardBuffer != null)
         {
-            KeyboardScript ks = keyboardUI.GetComponentInChildren<KeyboardScript>();
-            if (ks != null) ks.TextField = keyboardBuffer;
+            // Cautam scriptul tastaturii (presupunand ca exista un script KeyboardScript)
+            // Folosim un try-catch sau null check simplu pentru siguranta
+            var ks = keyboardUI.GetComponentInChildren<MonoBehaviour>(); 
+            // Nota: Aici am lasat generic pentru ca nu am codul KeyboardScript, 
+            // dar linia ta originala era buna daca ai acel script.
+             KeyboardScript realKs = keyboardUI.GetComponentInChildren<KeyboardScript>();
+             if (realKs != null) realKs.TextField = keyboardBuffer;
         }
     }
 
@@ -137,8 +159,13 @@ public class TakeNotes : MonoBehaviour
     void PositionUI()
     {
         if (!playerCamera || !notesUI) return;
+        
+        // Pozitionam UI-ul putin mai jos fata de camera ca sa fie confortabil
         Vector3 centerPos = playerCamera.position + playerCamera.forward * distanceInFront;
-        Quaternion faceCam = Quaternion.LookRotation(playerCamera.forward, playerCamera.up);
+        // Il tinem orizontal (sa nu se incline sus-jos cu capul, e mai citibil)
+        Vector3 lookPos = new Vector3(playerCamera.forward.x, 0, playerCamera.forward.z); 
+        Quaternion faceCam = Quaternion.LookRotation(lookPos);
+        
         notesUI.transform.SetPositionAndRotation(centerPos, faceCam);
     }
 
@@ -157,11 +184,11 @@ public class TakeNotes : MonoBehaviour
     private void OnEnable() 
     { 
         if (openAction.action != null) openAction.action.Enable(); 
-        if (closeAction.action != null) closeAction.action.Enable(); // NEW
+        if (closeAction.action != null) closeAction.action.Enable(); 
     }
     private void OnDisable() 
     { 
         if (openAction.action != null) openAction.action.Disable(); 
-        if (closeAction.action != null) closeAction.action.Disable(); // NEW
+        if (closeAction.action != null) closeAction.action.Disable(); 
     }
 }
