@@ -1,37 +1,44 @@
 using UnityEngine;
-using UnityEngine.InputSystem; // Pentru controllere VR
+using UnityEngine.InputSystem; 
 using Meta.WitAi.TTS.Utilities;
 using Oculus.Voice;
 using UnityEngine.Networking;
 using System.Text;
 using System.Collections;
-using TMPro; // Pentru Textul de pe ecran
+using TMPro; 
+using Unity.Services.Vivox;
+// 1. ADD THIS to access the Mic script
+using Meta.WitAi.Lib; 
 
 public class RobotBrain : MonoBehaviour
 {
+    [Header("Conflict Fix")]
+    [Tooltip("Drag the 'Mic' component from this object here")]
+    public Mic witMicComponent; // <--- NEW SLOT
+
     [Header("Robot Parts")]
     public AppVoiceExperience ears;
     public TTSSpeaker mouth;
 
     [Header("UI Feedback")]
-    public TextMeshProUGUI subtitleText; // Trage textul creat aici
-    public float textDisplayTime = 3.0f; // Cat timp ramane mesajul pe ecran
+    public TextMeshProUGUI subtitleText; 
+    public float textDisplayTime = 3.0f; 
 
     [Header("VR Input")]
-    // Aici vom pune butonul (ex: Grip sau Trigger)
     public InputActionProperty talkButton; 
 
     [Header("AI Personality")]
     [TextArea(3, 10)]
-    public string systemPrompt = "You are a helpful teaching assistant in a VR classroom. Your goal is to educate the user clearly and briefly. Keep your answers UNDER 5 SENTENCES. Do not give long lectures.";
+    public string systemPrompt = "You are a helpful teaching assistant. Keep answers short.";
 
     private bool isProcessing = false;
     private bool isHoldingButton = false;
+    private bool wasVivoxMutedBefore = false;
 
     private void OnEnable()
     {
         ears.VoiceEvents.OnFullTranscription.AddListener(OnFullTranscription);
-        ears.VoiceEvents.OnPartialTranscription.AddListener(OnPartialTranscription); // Vedem in timp real ce zici
+        ears.VoiceEvents.OnPartialTranscription.AddListener(OnPartialTranscription);
         ears.VoiceEvents.OnError.AddListener(OnWitError);
     }
 
@@ -46,96 +53,116 @@ public class RobotBrain : MonoBehaviour
     {
         Debug.LogError($"❌ [WIT ERROR] {error}: {message}");
         UpdateSubtitle("Error: " + error, Color.red);
+        RestoreVivox();
     }
 
     void Update()
     {
-        // 1. Detectam cand APESI butonul
         if (talkButton.action.WasPressedThisFrame() && !isProcessing)
         {
             isHoldingButton = true;
-            Debug.Log("🎤 [HOLD] Buton apasat -> Ascult...");
-            ears.Activate(); // Porneste microfonul
+            StartCoroutine(KickstartListening());
+        }
+
+        if (talkButton.action.WasReleasedThisFrame())
+        {
+            isHoldingButton = false; 
+            Debug.Log("🛑 [RELEASE] Button released.");
+            ears.Deactivate(); 
+            RestoreVivox();
+        }
+    }
+
+    // --- THE KICKSTART FIX ---
+    private IEnumerator KickstartListening()
+    {
+        Debug.Log("🔄 [1/4] Starting Audio Handoff...");
+
+        // 1. Mute Vivox
+        if (VivoxService.Instance != null && !VivoxService.Instance.IsInputDeviceMuted)
+        {
+            wasVivoxMutedBefore = false;
+            VivoxService.Instance.MuteInputDevice();
+        }
+        else wasVivoxMutedBefore = true;
+
+        // 2. FORCE KILL the Microphone driver
+        // This breaks Vivox's "Exclusive Mode" grip on the hardware
+        Microphone.End(null);
+        
+        yield return new WaitForSeconds(0.1f);
+
+        // 3. RESTART the Wit Mic
+        // This forces it to re-initialize at 48000Hz immediately
+        if (witMicComponent != null)
+        {
+            Debug.Log("🔌 [2/4] Restarting Mic Component...");
+            witMicComponent.enabled = false; 
+            yield return null; // Wait one frame
+            witMicComponent.enabled = true; // This triggers OnEnable -> StartRecording
+        }
+
+        yield return new WaitForSeconds(0.2f); // Wait for recording to stabilize
+
+        // 4. Activate Wit
+        if (isHoldingButton)
+        {
+            Debug.Log("🎤 [3/4] Mic Fresh & Ready! Activating Wit...");
+            ears.Activate(); 
             UpdateSubtitle("Listening...", Color.yellow);
         }
-
-        // 2. Detectam cand DAI DRUMUL la buton
-        if (talkButton.action.WasReleasedThisFrame() && isHoldingButton)
+        else
         {
-            isHoldingButton = false;
-            Debug.Log("🛑 [RELEASE] Buton eliberat -> Opresc si trimit...");
-            ears.Deactivate(); // Opreste microfonul fortat si declanseaza procesarea
+            RestoreVivox();
         }
     }
 
-    // Se apeleaza continuu in timp ce vorbesti
-    private void OnPartialTranscription(string text)
+    private void RestoreVivox()
     {
-        // Afisam ce intelege robotul in timp real
-        UpdateSubtitle(text + "...", Color.cyan); 
+        if (!wasVivoxMutedBefore && VivoxService.Instance != null)
+        {
+             // Give the mic back to Vivox
+             VivoxService.Instance.UnmuteInputDevice();
+        }
     }
 
-    // Se apeleaza cand ai terminat (dupa ce ai luat degetul de pe buton)
+    // --- STANDARD RESPONSE CODE ---
+    private void OnPartialTranscription(string text) { UpdateSubtitle(text + "...", Color.cyan); }
+
     private void OnFullTranscription(string text)
     {
-        if (string.IsNullOrEmpty(text)) return;
+        if (string.IsNullOrEmpty(text)) { RestoreVivox(); return; }
         if (isProcessing) return;
 
-        Debug.Log($"📝 [FINAL] Mesaj: '{text}'");
-        
-        // Afisam textul final curat
+        Debug.Log($"📝 [FINAL] Message: '{text}'");
         UpdateSubtitle(text, Color.green);
-        
-        // Pornim timer-ul sa dispara textul dupa cateva secunde
         StartCoroutine(HideSubtitleAfterDelay());
-
-        // Trimitem la Gemini
         StartCoroutine(AskGemini(text));
     }
 
     private IEnumerator HideSubtitleAfterDelay()
     {
         yield return new WaitForSeconds(textDisplayTime);
-        // Stergem textul doar daca nu vorbim iar intre timp
-        if (!isHoldingButton) 
-        {
-            subtitleText.text = "";
-        }
+        if (!isHoldingButton) subtitleText.text = "";
     }
 
     private void UpdateSubtitle(string msg, Color color)
     {
-        if (subtitleText != null)
-        {
-            subtitleText.text = msg;
-            subtitleText.color = color;
-        }
+        if (subtitleText != null) { subtitleText.text = msg; subtitleText.color = color; }
     }
     
+    // --- GEMINI ---
     private IEnumerator AskGemini(string userMessage)
     {
         isProcessing = true;
-        
-        // Folosim Gemma 3 27B (30 RPM)
         string url = "https://generativelanguage.googleapis.com/v1beta/models/gemma-3-27b-it:generateContent?key=" + ApiKeys.Gemini_Key;
         
         GeminiRequest requestData = new GeminiRequest();
-        requestData.contents = new GeminiContent[]
-        {
-            new GeminiContent
-            {
-                parts = new GeminiPart[]
-                {
-                    new GeminiPart { text = systemPrompt + "\n\nUser says: " + userMessage }
-                }
-            }
-        };
+        requestData.contents = new GeminiContent[] { new GeminiContent { parts = new GeminiPart[] { new GeminiPart { text = systemPrompt + "\n\nUser says: " + userMessage } } } };
 
-        string jsonToSend = JsonUtility.ToJson(requestData);
-        
         using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
         {
-            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonToSend);
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(JsonUtility.ToJson(requestData));
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
@@ -146,69 +173,35 @@ public class RobotBrain : MonoBehaviour
             {
                 Debug.LogError($"❌ [GEMINI ERROR] {request.error}");
                 mouth.Speak("Connection error.");
-                UpdateSubtitle("Error connecting to AI.", Color.red);
-                isProcessing = false; // Deblocam daca e eroare
+                isProcessing = false; 
             }
             else
             {
-                string jsonResponse = request.downloadHandler.text;
-                GeminiResponse responseData = JsonUtility.FromJson<GeminiResponse>(jsonResponse);
-
+                GeminiResponse responseData = JsonUtility.FromJson<GeminiResponse>(request.downloadHandler.text);
                 if (responseData.candidates != null && responseData.candidates.Length > 0)
                 {
-                    string aiAnswer = responseData.candidates[0].content.parts[0].text;
-                    Debug.Log($"🤖 [AI] Raspuns: '{aiAnswer}'");
-
-                    // AICI ESTE SCHIMBAREA: Nu mai dam Speak direct, ci pornim "felierea"
-                    StartCoroutine(SpeakLongText(aiAnswer));
+                    StartCoroutine(SpeakLongText(responseData.candidates[0].content.parts[0].text));
                 }
-                else
-                {
-                    isProcessing = false; // Deblocam daca raspunsul e gol
-                }
+                else isProcessing = false; 
             }
         }
     }
     
     private IEnumerator SpeakLongText(string fullText)
     {
-        // 1. Curatam textul
         fullText = fullText.Replace("*", "");
-
-        // 2. Il spargem in propozitii
         string[] sentences = fullText.Split(new char[] { '.', '?', '!', '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
-
         foreach (string sentence in sentences)
         {
             if (string.IsNullOrWhiteSpace(sentence)) continue;
-
-            string cleanSentence = sentence.Trim();
-            
-            // --- MODIFICARE 1: NU mai afisam textul robotului pe ecran ---
-            // UpdateSubtitle(cleanSentence, Color.white); // <--- Linia asta e stearsa/comentata
-            
-            // Robotul vorbeste
-            mouth.Speak(cleanSentence);
-
-            // --- MODIFICARE 2: PAUZE MAI SCURTE ---
-            // Formula veche: cleanSentence.Length * 0.08f + 0.5f; (Prea lenta)
-            // Formula noua: 0.06 secunde per litera + doar 0.1 secunde pauza intre fraze
-            float estimatedDuration = cleanSentence.Length * 0.06f + 0.1f;
-            
-            // Siguranta: Daca propozitia e prea scurta (ex: "Ok."), asteptam minim 1 secunda sa nu se incalece
-            if (estimatedDuration < 1.0f) estimatedDuration = 1.0f;
-            
-            yield return new WaitForSeconds(estimatedDuration);
+            mouth.Speak(sentence.Trim());
+            yield return new WaitForSeconds(sentence.Length * 0.06f + 0.1f);
         }
-
-        // La final curatam ecranul si deblocam
         UpdateSubtitle("", Color.white);
         isProcessing = false; 
-        Debug.Log("✅ [ROBOT] A terminat de vorbit tot.");
     }
 }
 
-// --- STRUCTURI JSON ---
 [System.Serializable] public class GeminiRequest { public GeminiContent[] contents; }
 [System.Serializable] public class GeminiContent { public GeminiPart[] parts; }
 [System.Serializable] public class GeminiPart { public string text; }

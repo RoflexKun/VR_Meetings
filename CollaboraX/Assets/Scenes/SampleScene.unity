@@ -819,6 +819,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6757069871992557346, guid: 3af692c71cb4aec40a577d429a4ad290, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2129077380}
+    - targetCorrespondingSourceObject: {fileID: 6757069871992557346, guid: 3af692c71cb4aec40a577d429a4ad290, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2129077382}
   m_SourcePrefab: {fileID: 100100000, guid: 3af692c71cb4aec40a577d429a4ad290, type: 3}
 --- !u!1 &2129077375 stripped
 GameObject:
@@ -1100,6 +1103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e827791d04f6ec9439d9d6ea023eae07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  witMicComponent: {fileID: 2129077382}
   ears: {fileID: 2129077377}
   mouth: {fileID: 2129077376}
   subtitleText: {fileID: 1529053381}
@@ -1216,6 +1220,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2129077382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2129077375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67f0646cbbbe2ed4f9049110e8fb7351, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _activateOnEnable: 1
+  MicStartTimeout: 5
+  MicBufferLength: 2
+  _micSampleRate: 48000
 --- !u!1001 &673201449567821853
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1815,6 +1835,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 242261366477605355, guid: 9589a67480e45a94a88c2a7c8ab0be4a, type: 3}
+      propertyPath: RequestSettings._configuration
+      value: 
+      objectReference: {fileID: 11400000, guid: 18a3e55bb2e8ed64f827a8448123eb25, type: 2}
     - target: {fileID: 7126040406795586873, guid: 9589a67480e45a94a88c2a7c8ab0be4a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
