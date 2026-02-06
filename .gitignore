@@ -58,7 +58,6 @@ CollaboraX/*.mdb.meta
 CollaboraX/sysinfo.txt
 
 # Builds
-CollaboraX/*.apk
 CollaboraX/*.unitypackage
 
 # Crashlytics generated file
